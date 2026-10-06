@@ -1,0 +1,264 @@
+/* amiri-arabic-400-normal */
+@font-face {
+  font-family: 'Amiri';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(amiri-arabic-400-normal.woff2) format('woff2');
+}
+/* amiri-latin-400-normal */
+@font-face {
+  font-family: 'Amiri';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(amiri-latin-400-normal.woff2) format('woff2');
+}
+/* amiri-latin-ext-400-normal */
+@font-face {
+  font-family: 'Amiri';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(amiri-latin-ext-400-normal.woff2) format('woff2');
+}
+/* amiri-arabic-400-italic */
+@font-face {
+  font-family: 'Amiri';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 400;
+  src: url(amiri-arabic-400-italic.woff2) format('woff2');
+}
+/* amiri-latin-400-italic */
+@font-face {
+  font-family: 'Amiri';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 400;
+  src: url(amiri-latin-400-italic.woff2) format('woff2');
+}
+/* amiri-latin-ext-400-italic */
+@font-face {
+  font-family: 'Amiri';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 400;
+  src: url(amiri-latin-ext-400-italic.woff2) format('woff2');
+}
+/* amiri-arabic-700-normal */
+@font-face {
+  font-family: 'Amiri';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url(amiri-arabic-700-normal.woff2) format('woff2');
+}
+/* amiri-latin-700-normal */
+@font-face {
+  font-family: 'Amiri';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url(amiri-latin-700-normal.woff2) format('woff2');
+}
+/* amiri-latin-ext-700-normal */
+@font-face {
+  font-family: 'Amiri';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url(amiri-latin-ext-700-normal.woff2) format('woff2');
+}
+/* noto-nastaliq-urdu-arabic-400-normal */
+@font-face {
+  font-family: 'Noto Nastaliq Urdu';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(noto-nastaliq-urdu-arabic-400-normal.woff2) format('woff2');
+}
+/* noto-nastaliq-urdu-latin-400-normal */
+@font-face {
+  font-family: 'Noto Nastaliq Urdu';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(noto-nastaliq-urdu-latin-400-normal.woff2) format('woff2');
+}
+/* noto-nastaliq-urdu-arabic-600-normal */
+@font-face {
+  font-family: 'Noto Nastaliq Urdu';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(noto-nastaliq-urdu-arabic-600-normal.woff2) format('woff2');
+}
+/* noto-nastaliq-urdu-latin-600-normal */
+@font-face {
+  font-family: 'Noto Nastaliq Urdu';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(noto-nastaliq-urdu-latin-600-normal.woff2) format('woff2');
+}
+/* figtree-latin-400-normal */
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(figtree-latin-400-normal.woff2) format('woff2');
+}
+/* figtree-latin-ext-400-normal */
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(figtree-latin-ext-400-normal.woff2) format('woff2');
+}
+/* figtree-latin-500-normal */
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(figtree-latin-500-normal.woff2) format('woff2');
+}
+/* figtree-latin-ext-500-normal */
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(figtree-latin-ext-500-normal.woff2) format('woff2');
+}
+/* figtree-latin-600-normal */
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(figtree-latin-600-normal.woff2) format('woff2');
+}
+/* figtree-latin-ext-600-normal */
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(figtree-latin-ext-600-normal.woff2) format('woff2');
+}
+/* figtree-latin-700-normal */
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url(figtree-latin-700-normal.woff2) format('woff2');
+}
+/* figtree-latin-ext-700-normal */
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url(figtree-latin-ext-700-normal.woff2) format('woff2');
+}
+/* alegreya-latin-500-normal */
+@font-face {
+  font-family: 'Alegreya';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(alegreya-latin-500-normal.woff2) format('woff2');
+}
+/* alegreya-latin-ext-500-normal */
+@font-face {
+  font-family: 'Alegreya';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(alegreya-latin-ext-500-normal.woff2) format('woff2');
+}
+/* alegreya-latin-500-italic */
+@font-face {
+  font-family: 'Alegreya';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 500;
+  src: url(alegreya-latin-500-italic.woff2) format('woff2');
+}
+/* alegreya-latin-ext-500-italic */
+@font-face {
+  font-family: 'Alegreya';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 500;
+  src: url(alegreya-latin-ext-500-italic.woff2) format('woff2');
+}
+/* alegreya-latin-700-normal */
+@font-face {
+  font-family: 'Alegreya';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url(alegreya-latin-700-normal.woff2) format('woff2');
+}
+/* alegreya-latin-ext-700-normal */
+@font-face {
+  font-family: 'Alegreya';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url(alegreya-latin-ext-700-normal.woff2) format('woff2');
+}
+/* alegreya-sans-latin-400-normal */
+@font-face {
+  font-family: 'Alegreya Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(alegreya-sans-latin-400-normal.woff2) format('woff2');
+}
+/* alegreya-sans-latin-ext-400-normal */
+@font-face {
+  font-family: 'Alegreya Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(alegreya-sans-latin-ext-400-normal.woff2) format('woff2');
+}
+/* alegreya-sans-latin-500-normal */
+@font-face {
+  font-family: 'Alegreya Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(alegreya-sans-latin-500-normal.woff2) format('woff2');
+}
+/* alegreya-sans-latin-ext-500-normal */
+@font-face {
+  font-family: 'Alegreya Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(alegreya-sans-latin-ext-500-normal.woff2) format('woff2');
+}
+/* alegreya-sans-latin-700-normal */
+@font-face {
+  font-family: 'Alegreya Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url(alegreya-sans-latin-700-normal.woff2) format('woff2');
+}
+/* alegreya-sans-latin-ext-700-normal */
+@font-face {
+  font-family: 'Alegreya Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url(alegreya-sans-latin-ext-700-normal.woff2) format('woff2');
+}

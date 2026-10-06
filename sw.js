@@ -1,0 +1,13 @@
+// Offline support: keeps every file of the app on the device after the first visit.
+const VERSION='qa-v5';
+const FILES=["./", "index.html", "kalimat.html", "lisan.html", "manifest.webmanifest", "config.js", "cloud.js", "vendor/supabase.js", "vendor/pdf.min.js", "vendor/pdf.worker.min.js", "fonts/fonts.css", "fonts/alegreya-latin-500-italic.woff2", "fonts/alegreya-latin-500-normal.woff2", "fonts/alegreya-latin-700-normal.woff2", "fonts/alegreya-latin-ext-500-italic.woff2", "fonts/alegreya-latin-ext-500-normal.woff2", "fonts/alegreya-latin-ext-700-normal.woff2", "fonts/alegreya-sans-latin-400-normal.woff2", "fonts/alegreya-sans-latin-500-normal.woff2", "fonts/alegreya-sans-latin-700-normal.woff2", "fonts/alegreya-sans-latin-ext-400-normal.woff2", "fonts/alegreya-sans-latin-ext-500-normal.woff2", "fonts/alegreya-sans-latin-ext-700-normal.woff2", "fonts/amiri-arabic-400-italic.woff2", "fonts/amiri-arabic-400-normal.woff2", "fonts/amiri-arabic-700-normal.woff2", "fonts/amiri-latin-400-italic.woff2", "fonts/amiri-latin-400-normal.woff2", "fonts/amiri-latin-700-normal.woff2", "fonts/amiri-latin-ext-400-italic.woff2", "fonts/amiri-latin-ext-400-normal.woff2", "fonts/amiri-latin-ext-700-normal.woff2", "fonts/figtree-latin-400-normal.woff2", "fonts/figtree-latin-500-normal.woff2", "fonts/figtree-latin-600-normal.woff2", "fonts/figtree-latin-700-normal.woff2", "fonts/figtree-latin-ext-400-normal.woff2", "fonts/figtree-latin-ext-500-normal.woff2", "fonts/figtree-latin-ext-600-normal.woff2", "fonts/figtree-latin-ext-700-normal.woff2", "fonts/noto-nastaliq-urdu-arabic-400-normal.woff2", "fonts/noto-nastaliq-urdu-arabic-600-normal.woff2", "fonts/noto-nastaliq-urdu-latin-400-normal.woff2", "fonts/noto-nastaliq-urdu-latin-600-normal.woff2", "icons/apple-touch-icon.png", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png"];
+self.addEventListener('install',e=>{e.waitUntil(caches.open(VERSION).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting()));});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==VERSION).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
+self.addEventListener('fetch',e=>{
+ const u=new URL(e.request.url);
+ if(e.request.method!=='GET'||u.origin!==location.origin)return;
+ if(u.pathname.endsWith('/config.js')){e.respondWith(fetch(e.request).then(r=>{const cp=r.clone();caches.open(VERSION).then(c=>c.put(e.request,cp));return r;}).catch(()=>caches.match(e.request)));return;}
+ e.respondWith(caches.match(e.request,{ignoreSearch:true}).then(hit=>{
+  const net=fetch(e.request).then(r=>{if(r.ok){const cp=r.clone();caches.open(VERSION).then(c=>c.put(e.request,cp));}return r;}).catch(()=>hit);
+  return hit||net;}));
+});

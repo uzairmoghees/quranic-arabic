@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#131C31">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Qur'anic Arabic">
+<title>Qur'anic Arabic — Kalimāt &amp; Lisān</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root{--indigo:#131C31;--indigo2:#1B2740;--indigo3:#243252;--gold:#C9A227;--gold2:#E7CE7B;--parch:#F4ECD8;--mist:#9FB0D0;--good:#8FC77A;--line:rgba(201,162,39,.28);
+ --lat:'Alegreya Sans',system-ui,-apple-system,'Segoe UI',sans-serif;--ar:'Amiri',serif;--ur:'Noto Nastaliq Urdu','Amiri',serif;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--indigo);color:var(--parch);font:16px/1.5 var(--lat);display:flex;flex-direction:column;height:100dvh;overflow:hidden;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--gold2);outline-offset:2px;border-radius:6px}
+.ar{font-family:var(--ar);direction:rtl;unicode-bidi:isolate}.ur{font-family:var(--ur);direction:rtl;unicode-bidi:isolate;line-height:2}
+header{flex:none;padding:calc(env(safe-area-inset-top,0px) + 6px) 14px 0;border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--indigo2),var(--indigo))}
+.hrow{display:flex;align-items:center;gap:14px;max-width:1200px;margin:0 auto}
+.brand{display:flex;align-items:baseline;gap:10px;margin-right:auto;min-width:0}
+.brand .ar{font-size:1.55rem;color:var(--gold2);line-height:1.5}
+.brand small{font-family:'Alegreya',serif;letter-spacing:.18em;text-transform:uppercase;font-size:.68rem;color:var(--mist);white-space:nowrap}
+nav.main{display:flex;gap:4px}
+nav.main button{background:none;border:0;padding:8px 12px;border-radius:999px;color:var(--mist);font-weight:500;display:flex;align-items:center;gap:6px}
+nav.main button .ico{font-family:var(--ar);font-size:1.05rem;line-height:1}
+nav.main button[aria-current="page"]{background:var(--indigo3);color:var(--gold2)}
+.subs{display:flex;gap:6px;max-width:1200px;margin:6px auto 0;padding-bottom:8px;overflow-x:auto}
+.subs button{border:1px solid var(--line);background:transparent;color:var(--mist);border-radius:999px;padding:4px 14px;font-size:.9rem;white-space:nowrap}
+.subs button[aria-selected="true"]{background:var(--gold2);border-color:var(--gold2);color:var(--indigo);font-weight:700}
+.subs:empty{display:none}
+.stage{flex:1;position:relative;min-height:0}
+.stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:var(--indigo);visibility:hidden}
+.stage iframe.on{visibility:visible}
+#today{position:absolute;inset:0;overflow:auto;padding:18px 16px 40px;display:none}
+#today.on{display:block}
+.wrap{max-width:980px;margin:0 auto}
+h1{font-family:'Alegreya',serif;font-weight:700;color:var(--gold2);font-size:1.7rem;margin:.2rem 0 .1rem}
+.lede{color:var(--mist);margin:0 0 1.2rem}
+.stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.stat{flex:1 1 140px;background:var(--indigo2);border:1px solid var(--line);border-radius:14px;padding:10px 14px}
+.stat b{display:block;font-family:'Alegreya',serif;font-size:1.7rem;color:var(--gold2);line-height:1.2;font-variant-numeric:tabular-nums}
+.stat span{color:var(--mist);font-size:.85rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px}
+.card{background:var(--indigo2);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.card h2{font-family:'Alegreya',serif;font-size:1.15rem;color:var(--gold2);margin:0 0 .3rem}
+.card p{margin:.2rem 0 .8rem;color:var(--parch)}
+.card .muted{color:var(--mist);font-size:.9rem}
+.btn{display:inline-flex;align-items:center;gap:6px;border-radius:10px;padding:8px 14px;border:1px solid var(--gold);background:transparent;color:var(--gold2);font-weight:600;margin:0 6px 6px 0}
+.btn.solid{background:var(--gold2);border-color:var(--gold2);color:var(--indigo)}
+.card.wide{grid-column:1/-1}
+.weak{border-top:1px solid var(--line);padding:10px 0 4px}
+.weak:first-of-type{border-top:0}
+.weak b{display:block}
+.words{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.wchip{background:var(--indigo3);border-radius:10px;padding:2px 10px 6px;text-align:center}
+.wchip .ar{font-size:1.35rem;display:block;line-height:1.8}
+.wchip small{color:var(--mist);font-size:.72rem;display:block;max-width:150px;line-height:1.2}
+.ok{color:var(--good);font-weight:600}
+.loading{color:var(--mist)}
+#gate{position:fixed;inset:0;z-index:50;background:radial-gradient(ellipse 120% 70% at 50% -10%,#22304f 0%,var(--indigo) 60%);display:flex;align-items:center;justify-content:center;padding:20px}
+.gbox{width:100%;max-width:380px;background:var(--indigo2);border:1px solid var(--line);border-radius:18px;padding:22px}
+.gbox h1{margin-top:0}.gbrand{text-align:center;font-size:1.8rem;color:var(--gold2)}
+.gbox label{display:block;color:var(--mist);font-size:.88rem;margin:10px 0}
+.gbox input{display:block;width:100%;margin-top:4px;font:inherit;font-size:1.05rem;color:var(--parch);background:var(--indigo);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.gbox .btn{width:100%;justify-content:center;margin:6px 0 0}.gerr{color:#EF8C8C;min-height:1.2em;margin:6px 0}
+.muted{color:var(--mist)}
+#acct{position:relative;margin-left:6px}
+#acct .who{width:36px;height:36px;border-radius:50%;border:1px solid var(--gold);background:var(--indigo3);color:var(--gold2);font-weight:700}
+#acct .menu{position:absolute;right:0;top:44px;z-index:30;width:250px;background:var(--indigo2);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:6px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+#acct .menu[hidden]{display:none}#acct .menu .btn{margin:0;justify-content:center}#acct .st{font-size:.85rem}
+.tscroll{overflow-x:auto;margin:10px 0 16px}
+.ctab{border-collapse:collapse;width:100%;min-width:820px;background:var(--indigo2);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.ctab th,.ctab td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;font-size:.93rem}
+.ctab thead th{color:var(--gold2);font-weight:600;background:var(--indigo3)}.ctab small{color:var(--mist)}
+@media (max-width:760px){
+ nav.main{position:fixed;left:0;right:0;bottom:0;z-index:20;background:linear-gradient(180deg,var(--indigo2),var(--indigo));border-top:1px solid var(--line);justify-content:space-around;padding:4px 4px calc(env(safe-area-inset-bottom,0px) + 4px)}
+ nav.main button{flex-direction:column;gap:0;font-size:.72rem;padding:6px 4px;border-radius:10px;flex:1}
+ nav.main button .ico{font-size:1.15rem;margin-bottom:2px}
+ .stage{margin-bottom:calc(58px + env(safe-area-inset-bottom,0px))}
+ .brand small{display:none}
+}
+</style>
+</head>
+<body>
+<header>
+ <div class="hrow">
+  <div class="brand"><span class="ar" lang="ar">لِسَانٌ عَرَبِيٌّ مُبِينٌ</span><small>Qur'anic Arabic</small></div>
+  <nav class="main" aria-label="Sections">
+   <button data-sec="today"><span class="ico">اليوم</span>Today</button>
+   <button data-sec="words"><span class="ico">كلمات</span>Words</button>
+   <button data-sec="quran"><span class="ico">قرآن</span>Qur'an</button>
+   <button data-sec="book"><span class="ico">كتاب</span>Book</button>
+   <button data-sec="practice"><span class="ico">تمرين</span>Practice</button>
+  </nav>
+ </div>
+ <div class="subs" role="tablist" aria-label="Section views"></div>
+</header>
+<div class="stage">
+ <div id="today" class="on"><div class="wrap"><p class="loading">Loading your progress…</p></div></div>
+ <iframe id="fK" data-src="kalimat.html" title="Words and Qur'an"></iframe>
+ <iframe id="fL" data-src="lisan.html" title="Grammar and book"></iframe>
+</div>
+<script src="config.js"></script>
+<script src="vendor/supabase.js"></script>
+<script src="cloud.js"></script>
+<script>
+const fK=document.getElementById('fK'),fL=document.getElementById('fL');
+const K=()=>{try{return fK.contentWindow.K||null;}catch(e){return null;}};
+const L=()=>{try{return fL.contentWindow.LQA||null;}catch(e){return null;}};
+const SUBS={class:[],words:[['study','Study'],['quiz','Quiz']],quran:[['read','Read'],['explore','Explore'],['about','Sources']],book:[],practice:[['practice','Drills'],['review','Review']],today:[]};
+let sec='today',sub=null,loaded={K:false,L:false};
+function paint(){
+ document.querySelectorAll('nav.main button').forEach(b=>b.setAttribute('aria-current',b.dataset.sec===sec?'page':'false'));
+ const s=document.querySelector('.subs');s.innerHTML=SUBS[sec].map(([k,l])=>`<button role="tab" data-sub="${k}" aria-selected="${k===sub}">${l}</button>`).join('');
+ s.querySelectorAll('button').forEach(b=>b.onclick=()=>open(sec,b.dataset.sub));
+ document.getElementById('today').classList.toggle('on',sec==='today'||sec==='class');
+ fK.classList.toggle('on',sec==='words'||sec==='quran');fL.classList.toggle('on',sec==='book'||sec==='practice');}
+function open(s,sb){sec=s;sub=sb||SUBS[s][0]&&SUBS[s][0][0]||null;paint();
+ if(s==='today')return renderToday();
+ if(s==='class')return window.QA_CLOUD.classView(document.getElementById('today'));
+ if(s==='words'||s==='quran'){const k=K();if(k)k.go(sub);}
+ if(s==='book'){const l=L();if(l)l.go({tab:'course',tool:null,from:null});}
+ if(s==='practice'){const l=L();if(!l)return;if(sub==='review')l.go({tab:'practice',tool:'test',opts:{review:true},from:null});else l.go({tab:'practice',tool:null,from:null});}}
+document.querySelectorAll('nav.main button').forEach(b=>b.onclick=()=>open(b.dataset.sec));
+// ---- API used by both modules ----
+window.LQ={
+ sync(app,tab,tool){if(app==='K'){const s=['study','quiz'].includes(tab)?'words':'quran';if(sec!=='today'||fK.classList.contains('on')){sec=s;sub=tab;paint();}}
+  else{if(!fL.classList.contains('on'))return;if(tab==='course'||tab==='book'){sec='book';sub=null;}else{sec='practice';sub=(tool==='test'&&L()&&L().getView().opts&&L().getView().opts.review)?'review':'practice';}paint();}},
+ clearK(){try{fK.contentDocument.querySelectorAll('.overlay').forEach(o=>o.remove());}catch(e){}},
+ root(r){this.clearK();sec='practice';sub='practice';paint();const l=L();if(l)l.go({tab:'practice',tool:'conj',opts:{root:r,form:'I',show:'madi',fromHub:true},from:null});},
+ ayah(ref){this.clearK();sec='quran';sub='read';paint();const k=K();if(k){k.go('read');k.showAyah(ref);}}
+};
+// ---- concept → Qur'anic words (weak spots feed the word review) ----
+const VFNAME={'إِفْعَال':'4','تَفْعِيل':'2','مُفَاعَلَة':'3','تَفَعُّل':'5','تَفَاعُل':'6','اِفْتِعَال':'8','اِنْفِعَال':'7','اِسْتِفْعَال':'10'};
+function stemOf(F){return F.s.find(x=>x.t==='V')||F.s.find(x=>['N','ADJ','PN','ACT_PCPL','PASS_PCPL','VN'].includes(x.t))||F.s[0];}
+function predFor(u,S){const r=s=>[...(s.r||'')];const V=s=>s.t==='V';
+ const P={u2:s=>s.t==='N'&&/^F/.test(s.n||'')&&!/[DP]/.test(s.n||''),u3:s=>['N','ADJ'].includes(s.t)&&/[DP]/.test(s.n||''),u5:s=>['N','ADJ'].includes(s.t)&&!!s.c,
+  u14:s=>V(s)&&s.x==='PERF'&&!s.ps,u15:s=>V(s)&&s.x==='IMPF'&&s.d==='IND'&&!s.ps,u17:s=>V(s)&&s.ps,u18:s=>V(s)&&(s.d==='SUBJ'||s.d==='JUS'),u19:s=>V(s)&&s.x==='IMPV',
+  u29:s=>V(s)&&s.ps&&s.v!=='1',u30:s=>V(s)&&/[أءإ]/.test(s.r||''),u31:s=>V(s)&&r(s).length===3&&r(s)[1]===r(s)[2],u32:s=>V(s)&&'وي'.includes(r(s)[0]),u33:s=>V(s)&&'وي'.includes(r(s)[1]),
+  u34:s=>V(s)&&'وي'.includes(r(s)[2]),u37:s=>['ACT_PCPL','PASS_PCPL'].includes(s.t),u22:s=>s.t==='PN'};
+ if(u==='u28'){const cnt={};Object.values(S.gsrs||{}).filter(c=>c.u==='u28').forEach(c=>{const a=c.q[1]==='t'?c.q[2][0]:c.q[1][c.q[2]];if(VFNAME[a])cnt[VFNAME[a]]=(cnt[VFNAME[a]]||0)+1;});
+  const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0];return top?{f:s=>V(s)&&s.v===top[0],label:'Form '+['','I','II','III','IV','V','VI','VII','VIII','IX','X'][+top[0]]}:{f:s=>V(s)&&s.v!=='1',label:'derived forms'};}
+ return P[u]?{f:P[u]}:null;}
+function wordsFor(u,S,n=8){const k=K();const p=predFor(u,S);if(!k||!p)return null;const out=[];
+ for(const C of k.DECK){if(out.length>=n)break;const F=k.FORMS[C.bare!=null?C.bare:C.fids[0]];if(!F)continue;const st=stemOf(F);
+  if(!st||!p.f(st))continue;const c=k.srsGet(C.k);if(c&&c.r>0)continue;out.push(C);}
+ return {list:out,label:p.label};}
+function addWords(u){const k=K(),l=L();if(!k||!l)return;const w=wordsFor(u,l.getS());if(!w)return;
+ w.list.forEach(C=>{if(!k.state.starred[C.k])k.toggleStar(C.ci);});renderToday(`Added ${w.list.length} words — they come up next in Words → Study.`);}
+// ---- Today ----
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function renderToday(flash){
+ const el=document.querySelector('#today .wrap');const k=K(),l=L();
+ if(!k||!l){el.innerHTML='<p class="loading">Loading your progress…</p>';return;}
+ const st=k.srsStats(),S=l.getS(),due=l.gDue().length,weak=l.gWeak().slice(0,3),U=l.UNITS;
+ const cov=k.coveragePct(),streak=(k.state.streak&&k.state.streak.n)||0;
+ const cur=U.find(u=>u.id===S.last)||U[0],ci=U.indexOf(cur),done=Object.keys(S.done||{}).length;
+ const gloss=C=>{const L0=k.LEMMAS[C.m];return (L0&&k.GLOSS[L0.l])||'';};
+ el.innerHTML=`<h1>Today</h1><p class="lede">One review queue for words and grammar. Start with what's due, then learn something new.</p>
+ ${flash?`<p class="ok">${esc(flash)}</p>`:''}
+ <div class="stats"><div class="stat"><b>${streak}</b><span>day streak</span></div><div class="stat"><b>${cov.toFixed(1)}%</b><span>of the Qur'an's words you've studied</span></div>
+ <div class="stat"><b>${st.due+due}</b><span>reviews due (${st.due} words, ${due} grammar)</span></div><div class="stat"><b>${done}/${U.length}</b><span>grammar units done</span></div></div>
+ <div class="grid">
+  <div class="card"><h2>Words</h2><p>${st.due?`${st.due} word${st.due===1?'':'s'} due for review.`:'No words due right now.'} ${st.neu.toLocaleString()} still new in your current set, most frequent first.</p>
+   <button class="btn solid" data-go="words:study">Study words</button><button class="btn" data-go="words:quiz">Quiz</button></div>
+  <div class="card"><h2>Book &amp; grammar</h2><p>${due?`${due} missed question${due===1?'':'s'} due for review.`:'No grammar reviews due.'} Next up: Unit ${ci+1}, ${esc(cur.en)}${S.best&&S.best[cur.id]!=null?` (best ${S.best[cur.id]}%)`:''}.</p>
+   ${due?`<button class="btn solid" data-go="practice:review">Review grammar</button>`:''}<button class="btn ${due?'':'solid'}" data-unit="${cur.id}">Continue unit ${ci+1}</button></div>
+  <div class="card wide"><h2>Weak spots</h2>${weak.length?weak.map(([u,n])=>{const x=U.find(y=>y.id===u);if(!x)return '';const w=wordsFor(u,S);
+    return `<div class="weak"><b>Unit ${U.indexOf(x)+1}: ${esc(x.en)}</b><span class="muted">${n} misses in the last two weeks</span>
+    <div><button class="btn" data-test="${u}">Retest this unit</button></div>
+    ${w&&w.list.length?`<div class="muted">Qur'anic words that use this${w.label?` (${w.label})`:''}, not yet learned:</div><div class="words">${w.list.map(C=>`<span class="wchip"><span class="ar">${esc(C.w||'')}</span><small>${esc(gloss(C))}</small></span>`).join('')}</div><button class="btn solid" data-add="${u}">Add these to my word review</button>`:''}</div>`;}).join('')
+   :`<p class="muted">Nothing stands out yet. Units you keep missing questions on will show here, with Qur'anic words that practise the same point.</p>`}</div>
+ </div>`;
+ el.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{const [s,sb]=b.dataset.go.split(':');open(s,sb);});
+ el.querySelectorAll('[data-unit]').forEach(b=>b.onclick=()=>{sec='book';sub=null;paint();l.go({tab:'course',unit:b.dataset.unit,unitOpen:true,tool:null,from:null});});
+ el.querySelectorAll('[data-test]').forEach(b=>b.onclick=()=>{sec='practice';sub='practice';paint();l.go({tab:'practice',tool:'test',opts:{unit:b.dataset.test,n:25},from:b.dataset.test});});
+ el.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>addWords(b.dataset.add));}
+fK.addEventListener('load',()=>{if(!fK.src)return;loaded.K=true;if(sec==='today')renderToday();});
+fL.addEventListener('load',()=>{if(!fL.src)return;loaded.L=true;if(sec==='today')renderToday();});
+window.QA_OPEN=s=>open(s);
+window.QA_START=()=>{[fK,fL].forEach(f=>{if(!f.src)f.src=f.dataset.src;});paint();renderToday();};
+paint();
+window.QA_BOOT();
+if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
