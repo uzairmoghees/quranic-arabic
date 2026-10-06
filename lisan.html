@@ -166,6 +166,31 @@ details.regular{margin-top:1.2rem;border:1px solid var(--line);border-radius:12p
 .books{margin-top:1.2rem;border-top:1px solid var(--line);padding-top:.6rem;font-size:.9rem}.books summary{cursor:pointer;color:var(--muted);font-weight:600}
 .books .bk{display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin:.4rem 0}.btn.small{padding:.25rem .6rem;font-size:.8rem}
 .lesson{max-width:900px}
+/* ayah context */
+.ayah{font-family:var(--ar);font-size:1.45rem;line-height:2.2;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:.5rem .9rem;margin:.6rem 0}
+.ayah .aw.hi{background:var(--teal2);color:var(--teal);border-radius:6px;padding:0 .2rem;box-shadow:0 0 0 2px var(--teal) inset}
+.ayah .aref{font-family:var(--lat);font-size:.75rem;color:var(--muted);margin-right:.6rem;direction:ltr;unicode-bidi:isolate}
+.meaning{margin:.4rem 0 .6rem;padding:.5rem .8rem;border-right:3px solid var(--teal);background:var(--surface);border-radius:8px}
+.meaning .ur{display:block;font-size:1.05rem;line-height:2.2}.meaning small{color:var(--muted)}.meaning a{color:var(--teal)}
+.lwords{display:flex;flex-wrap:wrap;gap:.4rem;margin:.6rem 0 .8rem;direction:rtl}
+.lw{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.1rem .7rem .4rem;text-align:center}
+.lw .ar{display:block;font-size:1.35rem}.lw small{display:block;direction:ltr;color:var(--muted);font-size:.72rem;max-width:150px;line-height:1.2}
+/* workbook */
+.wbsec{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:.9rem 1.1rem;margin:1rem 0;max-width:900px}
+.wbsec h2{margin:.1rem 0 .2rem}.wbq{margin:.8rem 0 .3rem;font-weight:500}
+.wbitem{border-top:1px solid var(--line);padding:.3rem 0 .6rem}.wbitem:first-child{border-top:0}
+.wbfoot{display:flex;align-items:center;gap:.6rem;margin-top:.6rem}.wbscore{font-weight:600;color:var(--teal)}
+.wbgrid input{width:100%;min-width:6.5rem;font-size:1.3rem;border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:.15rem .4rem;color:var(--ink)}
+.wbgrid input.right{border-color:var(--ok);background:var(--okbg)}.wbgrid input.wrong{border-color:var(--rose);background:var(--nobg)}
+.fix{color:var(--ok);font-size:1rem;margin-top:.2rem}
+.choice.sel{border-color:var(--teal);box-shadow:0 0 0 2px var(--teal) inset}
+.choices.stack{grid-template-columns:1fr}.choices.stack .choice{text-align:right}
+.slot{min-height:2.8rem;border:2px dashed var(--line);border-radius:10px;padding:.2rem .6rem;display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;font-size:1.4rem}
+.slot .pl{background:var(--teal2);border-radius:8px;padding:0 .5rem}
+.tiles{display:flex;flex-wrap:wrap;gap:.4rem;margin:.5rem 0}
+.tile{border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:.1rem .8rem;font-size:1.35rem;min-height:2.6rem}.tile:disabled{opacity:.3}
+.build.ok .slot{border-color:var(--ok);background:var(--okbg)}.build.no .slot{border-color:var(--rose);background:var(--nobg)}
+.dreamhw{margin-top:1rem;border:1px solid var(--line);border-radius:12px;padding:.5rem .9rem}.dreamhw summary{cursor:pointer;color:var(--muted);font-weight:600}
 /* tests */
 .src{margin:-.2rem 0 .4rem;font-size:.82rem;color:var(--teal);font-weight:600}.src.out{color:var(--muted);font-weight:500}
 .tstart{display:flex;align-items:center;gap:.6rem}.tstart label{display:flex;align-items:center;gap:.4rem;font-size:.9rem;color:var(--muted)}.tstart select{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:.35rem .4rem;color:var(--ink)}
@@ -570,7 +595,8 @@ const TOOLS={
  bab:['Which باب?','ابواب','Match the past to its present'],
  ref:['Reference tables','جدول','Pronouns, pointers, particles'],
  test:['Lesson test','امتحان','Questions on one unit, checked as you answer'],
- review:['Grammar review','دہرائی','Questions you missed, back on a schedule']};
+ review:['Grammar review','دہرائی','Questions you missed, back on a schedule'],
+ wb:['Workbook','ورک بک','Exercises for one unit, checked automatically']};
 function renderCourse(m){
  const u=UNITS.find(x=>x.id===view.unit)||UNITS[0];
  const done=Object.keys(S.done).length;
@@ -604,21 +630,22 @@ function renderCourse(m){
  m.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>go({tab:'practice',tool:b.dataset.tool,opts:JSON.parse(b.dataset.opts),from:u.id}));
  const tb=m.querySelector('[data-test]');if(tb)tb.onclick=()=>{const n=+m.querySelector('[data-n]').value;S.testN=n;save();go({tab:'practice',tool:'test',opts:{unit:u.id,n},from:u.id});};
  m.querySelector('[data-done]').onclick=()=>{if(S.done[u.id])delete S.done[u.id];else S.done[u.id]=1;save();render();};
+ if(view.unitOpen||window.innerWidth>860){S.readLog=S.readLog||{};const dk=new Date().toDateString();S.readLog[dk]=[...new Set([...(S.readLog[dk]||[]),u.id])];save();}
  mountStrips(m.querySelector('.lesson'));bindManage(m);
  const on=m.querySelector('.unit.on');if(on&&!view.unitOpen)on.scrollIntoView({block:'nearest'});}
 // ===== practice hub =====
 function renderPractice(m){
  if(!view.tool){
   m.innerHTML=`<div class="hub"><h1>Practice</h1><p class="lede">Drills that follow the book's rules. The verb tools build forms for any sound three-letter root; root letters are coloured so the pattern shows through.</p>
-  <div class="testcard"><div><b>Grammar review</b><span>${gDue().length} missed question${gDue().length===1?'':'s'} due now. Anything you get wrong in a lesson test comes back here on a schedule.</span></div><button class="btn primary" data-review>Review</button></div><h2>Lesson tests</h2><div class="unitgrid">${UNITS.filter(u=>TESTS[u.id]).map((u,i)=>`<button data-tu="${u.id}"><span class="n">${UNITS.indexOf(u)+1}</span>${esc(u.en)}${S.best&&S.best[u.id]!=null?`<small>${S.best[u.id]}%</small>`:''}</button>`).join('')}</div><h2>Drills</h2><div class="tools">${Object.entries(TOOLS).filter(([k])=>k!=='test'&&k!=='review').map(([k,[en,ur,d]])=>`<button class="tool" data-tool="${k}"><span class="ur" dir="rtl">${ur}</span><b>${en}</b><small>${d}</small></button>`).join('')}</div></div>`;
+  <div class="testcard"><div><b>Grammar review</b><span>${gDue().length} missed question${gDue().length===1?'':'s'} due now. Anything you get wrong in a lesson test comes back here on a schedule.</span></div><button class="btn primary" data-review>Review</button></div><h2>Lesson tests</h2><div class="unitgrid">${UNITS.filter(u=>TESTS[u.id]).map((u,i)=>`<button data-tu="${u.id}"><span class="n">${UNITS.indexOf(u)+1}</span>${esc(u.en)}${S.best&&S.best[u.id]!=null?`<small>${S.best[u.id]}%</small>`:''}</button>`).join('')}</div><h2>Drills</h2><div class="tools">${Object.entries(TOOLS).filter(([k])=>!['test','review','wb'].includes(k)).map(([k,[en,ur,d]])=>`<button class="tool" data-tool="${k}"><span class="ur" dir="rtl">${ur}</span><b>${en}</b><small>${d}</small></button>`).join('')}</div></div>`;
   m.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>go({tool:b.dataset.tool,opts:{}}));
   m.querySelector('[data-review]').onclick=()=>go({tool:'test',opts:{review:true},from:null});
   m.querySelectorAll('[data-tu]').forEach(b=>b.onclick=()=>go({tool:'test',opts:{unit:b.dataset.tu,n:S.testN||50},from:b.dataset.tu}));return;}
  const T=view.tool==='test'&&view.opts&&view.opts.review?TOOLS.review:TOOLS[view.tool];
- m.innerHTML=`<div class="toolpage"><div class="crumbs"><button class="back" data-hub>All drills</button>${view.from?`<button class="back" data-from>Back to unit</button>`:''}</div><h1>${esc(T[0])} <span class="ur" dir="rtl">${T[1]}</span></h1>${view.tool==='test'&&view.opts.review?`<p class="kicker">${gDue().length} due now</p>`:view.tool==='test'?`<p class="kicker">Unit ${UNITS.findIndex(x=>x.id===view.opts.unit)+1}: ${esc((UNITS.find(x=>x.id===view.opts.unit)||{}).en||'')}</p>`:''}<div id="tool"></div></div>`;
+ m.innerHTML=`<div class="toolpage"><div class="crumbs"><button class="back" data-hub>All drills</button>${view.from?`<button class="back" data-from>Back to unit</button>`:''}</div><h1>${esc(T[0])} <span class="ur" dir="rtl">${T[1]}</span></h1>${view.tool==='wb'?`<p class="kicker">Unit ${UNITS.findIndex(x=>x.id===view.opts.unit)+1}: ${esc((UNITS.find(x=>x.id===view.opts.unit)||{}).en||'')}</p>`:view.tool==='test'&&view.opts.review?`<p class="kicker">${gDue().length} due now</p>`:view.tool==='test'?`<p class="kicker">Unit ${UNITS.findIndex(x=>x.id===view.opts.unit)+1}: ${esc((UNITS.find(x=>x.id===view.opts.unit)||{}).en||'')}</p>`:''}<div id="tool"></div></div>`;
  m.querySelector('[data-hub]').onclick=()=>go({tool:null,from:null});
  const f=m.querySelector('[data-from]');if(f)f.onclick=()=>go({tab:'course',unit:view.from,unitOpen:true,tool:null,from:null});
- ({conj:toolConj,mazid:toolMazid,sigha:toolSigha,nounq:toolNounQ,decl:toolDecl,agree:toolAgree,idafa:toolIdafa,sun:toolSun,bab:toolBab,ref:toolRef,test:toolTest,review:(el)=>toolTest(el,{review:true})})[view.tool]($('#tool'),view.opts||{});}
+ ({conj:toolConj,mazid:toolMazid,sigha:toolSigha,nounq:toolNounQ,decl:toolDecl,agree:toolAgree,idafa:toolIdafa,sun:toolSun,bab:toolBab,ref:toolRef,test:toolTest,review:(el)=>toolTest(el,{review:true}),wb:toolWorkbook})[view.tool]($('#tool'),view.opts||{});}
 // ---- grid (the book's گردان layout) ----
 const ROWS=[['غائب مذکر','3rd m.'],['غائب مؤنث','3rd f.'],['حاضر مذکر','2nd m.'],['حاضر مؤنث','2nd f.'],['متکلم','1st']];
 function gridHTML(forms,opts={}){
@@ -1585,20 +1612,20 @@ function toolTest(el,o){
   const q=qs[i],typed=q[1]==='t';
   box.innerHTML=`<div class="qhead"><span>Question ${i+1} of ${qs.length}</span><span>${right} correct</span></div>
    <div class="tbar"><i style="width:${i/qs.length*100}%"></i></div>
-   <p class="tq">${rich(q[0])}</p>${q.ref?`<p class="src">${refLink(q.ref)}</p>`:q.nonQ?`<p class="src out">Practice word — not from the Qur'an</p>`:''}
+   <p class="tq">${rich(q[0])}</p>${ayahBox(q)}${q.ref?`<p class="src">${refLink(q.ref)}</p>`:q.nonQ?`<p class="src out">Practice word — not from the Qur'an</p>`:''}
    ${typed?`<div class="typein"><input class="ar ansin" dir="rtl" lang="ar" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Your answer in Arabic"><button class="btn primary check">Check</button></div>
     <p class="hint">Vowel marks are optional — only the letters are checked.</p>
     <div class="keypad" aria-label="Arabic letters">${KEYS.map(k=>`<button data-k="${k}" class="ar">${k}</button>`).join('')}<button data-k=" " class="wide">space</button><button data-k="bs" class="wide" aria-label="Delete">⌫</button></div>`
    :`<div class="choices">${shuffle(q[1].map((x,j)=>[x,j])).map(([x,j])=>`<button class="choice" data-j="${j}">${rich(x)}</button>`).join('')}</div>`}
    <div class="verdict" aria-live="polite"></div><div class="tfoot"><button class="btn primary nextq" hidden>${i<qs.length-1?'Next question':'See result'}</button></div>`;
-  const verdict=(ok,correct)=>{if(ok)right++;else missed.push([q[0],correct]);gRecord(q,ok,q.u||u.id);
+  const verdict=(ok,correct)=>{if(ok)right++;else missed.push([q[0],correct]);gRecord(q,ok,q.u||u.id);showMeaning(box,q);
    box.querySelector('.verdict').className='verdict '+(ok?'ok':'no');
    box.querySelector('.verdict').innerHTML=`<b>${ok?'Correct.':'Incorrect.'}</b> ${ok?'':'Correct answer: '+rich(correct)+'. '}${rich(q[3]&&q[3]!==correct?q[3]:'')}`;
    box.querySelector('.qhead span:last-child').textContent=`${right} correct`;
    const n=box.querySelector('.nextq');n.hidden=false;n.focus();};
   if(typed){const inp=box.querySelector('.ansin');let done=false;
    const check=()=>{if(done||!inp.value.trim())return;done=true;const ok=q[2].some(a=>normAr(a)===normAr(inp.value));
-    const near=!ok&&q[2].some(a=>normLoose(a)===normLoose(inp.value));if(near){inp.readOnly=true;inp.classList.add('right');box.querySelector('.check').disabled=true;box.querySelectorAll('.keypad button').forEach(b=>b.disabled=true);right++;gRecord(q,true,q.u||u.id);box.querySelector('.verdict').className='verdict ok';box.querySelector('.verdict').innerHTML=`<b>Correct.</b> One spelling note: the hamza is written on its seat — ${rich(q[3]||q[2][0])}.`;box.querySelector('.qhead span:last-child').textContent=`${right} correct`;const n=box.querySelector('.nextq');n.hidden=false;n.focus();return;}
+    const near=!ok&&q[2].some(a=>normLoose(a)===normLoose(inp.value));if(near){inp.readOnly=true;inp.classList.add('right');box.querySelector('.check').disabled=true;box.querySelectorAll('.keypad button').forEach(b=>b.disabled=true);right++;gRecord(q,true,q.u||u.id);showMeaning(box,q);box.querySelector('.verdict').className='verdict ok';box.querySelector('.verdict').innerHTML=`<b>Correct.</b> One spelling note: the hamza is written on its seat — ${rich(q[3]||q[2][0])}.`;box.querySelector('.qhead span:last-child').textContent=`${right} correct`;const n=box.querySelector('.nextq');n.hidden=false;n.focus();return;}
     inp.readOnly=true;inp.classList.add(ok?'right':'wrong');box.querySelector('.check').disabled=true;box.querySelectorAll('.keypad button').forEach(b=>b.disabled=true);verdict(ok,q[3]||q[2][0]);};
    box.querySelector('.check').onclick=check;inp.onkeydown=e=>{if(e.key==='Enter')check();};
    box.querySelectorAll('.keypad button').forEach(b=>b.onclick=()=>{const k=b.dataset.k;inp.value=k==='bs'?[...inp.value].slice(0,-1).join(''):inp.value+k;});
@@ -1611,6 +1638,7 @@ function toolTest(el,o){
   box.querySelector('.nextq').onclick=()=>{i++;i<qs.length?show():finish();};}
  function finish(){
   const pct=Math.round(right/qs.length*100);
+  if(!o.review){S.testLog=S.testLog||{};const dk=new Date().toDateString();(S.testLog[dk]=S.testLog[dk]||[]).push({u:u.id,pct:Math.round(right/qs.length*100)});}
   S.best=S.best||{};const prev=o.review?0:(S.best[u.id]||0);if(!o.review){S.best[u.id]=Math.max(prev,pct);if(pct>=80)S.done[u.id]=1;}save();
   box.innerHTML=`<div class="result"><p class="big-score">${pct}%</p><p>${right} of ${qs.length} correct${o.review?' — missed items come back sooner; correct ones move further out.':pct>=80?' — unit marked as done.':' — 80% marks the unit as done.'}${prev&&pct>prev?' New best.':''}</p></div>
    ${missed.length?`<h3>Review these</h3><ol class="missed">${missed.map(([q,a])=>`<li>${rich(q)}<br><span class="hint">Answer:</span> ${rich(a)}</li>`).join('')}</ol>`:'<p>Every answer correct.</p>'}
@@ -1619,6 +1647,17 @@ function toolTest(el,o){
   box.querySelector('[data-unitback]').onclick=()=>go(o.review?{tab:'practice',tool:null}:{tab:'course',unit:u.id,unitOpen:true,tool:null,from:null});
   const nx=box.querySelector('[data-nextunit]');if(nx)nx.onclick=()=>{const v=UNITS[UNITS.indexOf(u)+1];S.last=v.id;save();go({tab:'course',unit:v.id,unitOpen:true,tool:null,from:null});};}
  show();}
+
+// ---- show the āyah a Qur'an question comes from; reveal its meaning after answering ----
+function ayahData(ref){try{const h=HUB();return h&&h.ayahData?h.ayahData(ref):null;}catch(e){return null;}}
+function ayahBox(q){if(!q.ref)return '';const A=ayahData(q.ref);if(!A||!A.words.length)return '';
+ const tok=(q[0].match(/[\u0621-\u0652\u0670\u06D6-\u06ED]+/)||[''])[0],tl=qL(tok);
+ let hi=A.words.findIndex(w=>tl&&qL(w).includes(tl));
+ let ws=A.words.map((w,i)=>`<span class="aw${i===hi?' hi':''}">${esc(w)}</span>`);
+ if(ws.length>26){const c=hi<0?0:hi,a=Math.max(0,c-10),b=Math.min(ws.length,c+12);ws=(a>0?['…']:[]).concat(ws.slice(a,b),b<ws.length?['…']:[]);}
+ return `<div class="ayah" dir="rtl">${ws.join(' ')}<span class="aref">${q.ref}</span></div>`;}
+function showMeaning(box,q){if(!q.ref)return;const A=ayahData(q.ref);if(!A||!A.urdu)return;const v=box.querySelector('.verdict');if(!v||box.querySelector('.meaning'))return;
+ v.insertAdjacentHTML('afterend',`<div class="meaning"><span class="ur" dir="rtl">${esc(A.urdu)}</span><small>Maudūdī · ${q.ref} · <a href="#" onclick="HUB().ayah('${q.ref}');return false">open in Qur'an ↗</a></small></div>`);}
 // ===== Book library: Lisan ul Quran + the Dream textbook and workbook, each the user's own copy kept on this device =====
 const bookToPdf=p=>p<=14?p:p<=378?p+1:p;
 const pdfToBook=p=>p<=14?p:p<=379?p-1:p;
@@ -1750,14 +1789,16 @@ function missingBook(id){return `<div class="addbook" data-add="${id}"><p>${id==
 function chapterHTML(u){
  const [la,lb]=unitLisanRange(u),DR=DREAMR[u.id]||[];
  const T=DR.filter(x=>x.b==='T'),W=DR.filter(x=>x.b==='W');
- const nav=[['c-lisan','Lisan ul Quran'],...(T.length?[['c-dream','Dream']]:[]),...(W.length?[['c-hw','Homework']]:[]),['c-practice','Practise & test']];
+ const nav=[['c-lisan','Lisan ul Quran'],...(T.length?[['c-dream','Dream']]:[]),['c-wb','Workbook'],...(HUB()?[['c-words','Words']]:[]),['c-practice','Practise & test']];
  let h=`<nav class="jump">${nav.map(([k,l])=>`<a href="#${k}">${l}</a>`).join('')}</nav>`;
  h+=`<section id="c-lisan" class="csec"><h2>Lisan ul Quran <span class="hint">pp. ${la}–${lb}</span></h2>
   <div class="topicchips">${u.topics.map(([t,p])=>`<button class="tchip" data-jump="lisan-${bookToPdf(p)}"><span class="ur" dir="rtl">${esc(t)}</span><small>p. ${p}</small></button>`).join('')}</div>
   <div data-strip="lisan" data-from="${bookToPdf(la)}" data-to="${bookToPdf(lb)}"></div></section>`;
  if(T.length)h+=`<section id="c-dream" class="csec"><h2>Dream <span class="hint">(Bayyinah) — the same topic explained in English</span></h2>${T.map(x=>`<h3 class="subh">${esc(x.label)} <span class="hint">pp. ${x.from}–${x.to}</span></h3><div data-strip="dtb" data-from="${x.from}" data-to="${x.to}"></div>`).join('')}</section>`;
- if(W.length)h+=`<section id="c-hw" class="csec"><h2>Homework <span class="hint">Dream workbook — try it first, then check the answer key</span></h2>${W.map(x=>`<h3 class="subh">${esc(x.label)} <span class="hint">pp. ${x.from}–${x.to}</span></h3><div data-strip="dwb" data-from="${x.from}" data-to="${x.to}"></div>
-  <details class="akey"><summary>Answer key · pp. ${x.akFrom}–${x.akTo}</summary><div data-strip="dwb" data-from="${x.akFrom}" data-to="${x.akTo}" data-lazy="1"></div></details>`).join('')}</section>`;
+ h+=`<section id="c-wb" class="csec"><h2>Workbook</h2><div class="testcard"><div><b>Exercises for this unit</b><span>Memorisation, recognition, ḥarakāt in real āyāt, meaning and construction — checked automatically, new each time.${S.wb&&S.wb[u.id]?` Last score: ${S.wb[u.id].pct}%.`:''}</span></div><button class="btn primary" data-wb="${u.id}">Open workbook</button></div>
+  ${W.length?`<details class="dreamhw"><summary>Dream homework (optional — uses your own Dream Workbook PDF)</summary>${W.map(x=>`<h3 class="subh">${esc(x.label)} <span class="hint">pp. ${x.from}–${x.to}</span></h3><div data-strip="dwb" data-from="${x.from}" data-to="${x.to}"></div>
+  <details class="akey"><summary>Answer key · pp. ${x.akFrom}–${x.akTo}</summary><div data-strip="dwb" data-from="${x.akFrom}" data-to="${x.akTo}" data-lazy="1"></div></details>`).join('')}</details>`:''}</section>`;
+ if(HUB())h+=`<section id="c-words" class="csec" data-words="${u.id}"></section>`;
  return h;}
 const _io='IntersectionObserver' in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){_io.unobserve(e.target);drawPage(e.target);}}),{rootMargin:'600px 0px'}):null;
 async function drawPage(fig){const id=fig.dataset.book,p=+fig.dataset.p;const pdf=await loadStored(id);if(!pdf||p>pdf.numPages){fig.remove();return;}
@@ -1772,11 +1813,106 @@ async function mountStrips(root){
    inp.onchange=async e=>{const f=e.target.files[0];if(!f)return;st.textContent=' Opening…';try{PDFS[id]=await openBlob(f);render();idbPut(BOOKS[id].key,f).catch(()=>{});}catch(er){st.textContent=' That file could not be opened.';}};continue;}
   el.innerHTML=strip(id,a,b);
   el.querySelectorAll('.pg-wrap').forEach(f=>{f.onclick=()=>f.classList.toggle('zoom');if(_io)_io.observe(f);else drawPage(f);});}
+ root.querySelectorAll('[data-wb]').forEach(b=>b.onclick=()=>go({tab:'practice',tool:'wb',opts:{unit:b.dataset.wb},from:b.dataset.wb}));
  root.querySelectorAll('[data-jump]').forEach(b=>b.onclick=()=>{const t=document.getElementById(b.dataset.jump);if(t)t.scrollIntoView({behavior:'smooth',block:'start'});});
  root.querySelectorAll('.jump a').forEach(a=>a.onclick=e=>{e.preventDefault();const t=document.getElementById(a.getAttribute('href').slice(1));if(t)t.scrollIntoView({behavior:'smooth',block:'start'});});
+ const ws=root.querySelector('[data-words]');if(ws){const uid=ws.dataset.words;let W=null;try{W=HUB().unitWords(uid,10);}catch(e){}
+  if(W&&W.list.length){ws.innerHTML=`<h2>Words from the Qur'an for this lesson</h2><p class="hint">Frequent Qur'anic words that use this lesson's grammar${W.label?' ('+esc(W.label)+')':''}, not yet in your word review.</p>
+   <div class="lwords">${W.list.map(x=>`<span class="lw"><span class="ar">${esc(x.w)}</span><small>${esc(x.g)}</small></span>`).join('')}</div>
+   <button class="btn primary" data-addw>Add these to my word review</button> <span class="hint addmsg"></span>`;
+   ws.querySelector('[data-addw]').onclick=()=>{const n=HUB().addUnitWords(uid);ws.querySelector('.addmsg').innerHTML=`Added ${n} words. <a href="#" data-gow>Study them now →</a>`;const g=ws.querySelector('[data-gow]');if(g)g.onclick=e=>{e.preventDefault();HUB().openWords();};};}
+  else ws.remove();}
  if(view.scrollTo){const tgt=view.scrollTo;view.scrollTo=null;setTimeout(()=>{const t=document.getElementById(tgt);if(t)t.scrollIntoView({block:'start'});},60);}}
 function manageBooksHTML(){return `<details class="books"><summary>Books on this device</summary>${Object.entries(BOOKS).map(([k,B])=>`<div class="bk"><span>${esc(B.title)}</span><label class="btn ghost small">${PDFS[k]?'Replace':'Add'}<input type="file" accept="application/pdf" hidden data-bk="${k}"></label></div>`).join('')}<p class="hint">The PDFs stay on this device and are never uploaded.</p></details>`;}
 function bindManage(root){root.querySelectorAll('[data-bk]').forEach(inp=>inp.onchange=async e=>{const id=inp.dataset.bk,f=e.target.files[0];if(!f)return;try{PDFS[id]=await openBlob(f);render();idbPut(BOOKS[id].key,f).catch(()=>{});}catch(er){}});}
+// ===== Virtual workbook: our own exercises per unit, checked automatically (no PDF needed) =====
+const WB_ROWS=['غائب مذکر','غائب مؤنث','حاضر مذکر','حاضر مؤنث','متکلم'];
+function blanks(n,k){const idx=shuffle([...Array(n).keys()]).slice(0,k);return new Set(idx);}
+function chartNoun(){const n=pick(NOUNS.filter(hasPl)),def=Math.random()<.5,cells=[];
+ const rows=[[1,'واحد'],[2,'مثنیٰ'],[3,n[2]==='smp'?'جمع سالم مذکر':n[2]==='sfp'?'جمع سالم مؤنث':'جمع مکسر']];
+ rows.forEach(([num])=>[0,1,2].forEach(c=>cells.push(nounForm(n,num,def,c))));const B=blanks(9,5);
+ return {title:`Fill in every form of ${nounForm(n,1,def,0)} (${n[3]})${def?' with الْ':''}`,cols:['','رفع','نصب','جر'],rows:rows.map(([,l],r)=>[l,...[0,1,2].map(c=>({a:cells[r*3+c],blank:B.has(r*3+c)}))])};}
+function chartVerb(kind){const [R,bab,en]=pick(ROOTS.filter(r=>!(kind==='pass'&&r[1]==='karuma')));const t=templates('I',bab);
+ const tab=(kind==='madi'?madiTable(t,R):kind==='pass'?madiTable(t,R,true):mudTable(t,R,kind)).map(stripM);const B=blanks(14,8);
+ const lbl={madi:'ماضی',raf:'مضارع',pass:'ماضی مجہول',jazm:'مضارع اخف (مجزوم)',nasb:'مضارع خفیف (منصوب)'}[kind];
+ const rows=[0,1,2,3].map(r=>[WB_ROWS[r],...[0,1,2].map(c=>({a:tab[r*3+c],blank:B.has(r*3+c)}))]);rows.push([WB_ROWS[4],{a:tab[12],blank:B.has(12)},{a:'',na:1},{a:tab[13],blank:B.has(13)}]);
+ return {title:`Complete the ${lbl} of ${[...R].join(' ')} (${en}): ${tab[0]}`,cols:['','واحد','مثنیٰ','جمع'],rows};}
+function chartWeak(keys){const W=WEAK[pick(keys)];const k=W.mud&&Math.random()<.5?'mud':'madi';const tab=W[k].split(' ');const B=blanks(14,8);
+ const rows=[0,1,2,3].map(r=>[WB_ROWS[r],...[0,1,2].map(c=>({a:tab[r*3+c],blank:B.has(r*3+c)}))]);rows.push([WB_ROWS[4],{a:tab[12],blank:B.has(12)},{a:'',na:1},{a:tab[13],blank:B.has(13)}]);
+ return {title:`Complete the ${k==='madi'?'ماضی':'مضارع'} of ${W.v} (${W.e})`,cols:['','واحد','مثنیٰ','جمع'],rows};}
+function chartAmr(){const [R,bab,en]=pick(ROOTS);const a=amrTable(templates('I',bab),R,'I').map(stripM);const B=blanks(6,4);
+ return {title:`Complete the command (امر) of ${[...R].join(' ')} (${en})`,cols:['','واحد','مثنیٰ','جمع'],rows:[['مذکر',...[0,1,2].map(i=>({a:a[i],blank:B.has(i)}))],['مؤنث',...[3,4,5].map(i=>({a:a[i],blank:B.has(i)}))]]};}
+function chartRef(key,cols){const R=REFS[key];const B=new Set();const cells=[];R.rows.forEach((r,i)=>cols.forEach(c=>cells.push([i,c])));blanks(cells.length,Math.ceil(cells.length*.55)).forEach(x=>B.add(x));
+ let n=0;return {title:`Fill in the chart: ${R.t}`,cols:['',...cols.map(c=>R.cols[c])],rows:R.rows.map(r=>[r[0],...cols.map(c=>({a:r[c],blank:B.has(n++)}))])};}
+function chartMazid(){const [R,,en]=pick(MAZID_EX);const F=['IV','II','III','V','VI','VIII','VII','X'];const keys=['madi','mud','masdar'];const B=blanks(24,13);let n=0;
+ return {title:`The root ${[...R].join(' ')} through the derived patterns`,cols:['باب','ماضی','مضارع','مصدر'],rows:F.map(f=>[FORMS[f].name,...keys.map(k=>({a:stripM(mapT(FORMS[f][k],R)),blank:B.has(n++)}))])};}
+function chartDerived(){const [R,bab,en]=pick(ROOTS.filter(x=>TRANS.includes(x[0])));const t=templates('I',bab);const fa=nounGardan(t.fail,R).map(stripM),mf=nounGardan(t.maful,R).map(stripM);const B=blanks(12,7);
+ const L=['واحد مذکر','مثنیٰ مذکر','جمع مذکر','واحد مؤنث','مثنیٰ مؤنث','جمع مؤنث'];return {title:`اسم الفاعل and اسم المفعول of ${[...R].join(' ')} (${en})`,cols:['','اسم الفاعل','اسم المفعول'],rows:L.map((l,i)=>[l,{a:fa[i],blank:B.has(i)},{a:mf[i],blank:B.has(6+i)}])};}
+function chartBab(){const rs=shuffle(ROOTS).slice(0,6);return {title:'Write the present tense (he) of each verb',cols:['ماضی','مضارع','meaning'],rows:rs.map(([R,bab,en])=>{const t=templates('I',bab);return [stripM(mapT(t.madi,R)),{a:stripM(mapT(t.mud,R)),blank:true},en];})};}
+const WB_CHART={u3:chartNoun,u5:chartNoun,u6:chartNoun,u22:chartNoun,u8:()=>chartRef('pron',[1,2]),u10:()=>chartRef('pron',[3]),u11:()=>chartRef('jarr',[2]),u13:()=>chartRef('rel',[1,2]),
+ u14:()=>chartVerb('madi'),u15:()=>chartVerb('raf'),u16:chartBab,u17:()=>chartVerb('pass'),u18:()=>chartVerb(pick(['jazm','nasb'])),u19:chartAmr,u24:()=>chartRef('dhu',[1,2,3]),
+ u28:chartMazid,u29:chartMazid,u31:()=>chartWeak(['madda','dhanna','radda','massa']),u32:()=>chartWeak(['waada','wajada','wadaa']),u33:()=>chartWeak(['qala','baa','khafa']),u34:()=>chartWeak(['daa','rama']),u37:chartDerived};
+// ---- item makers ----
+function wbGen(uid,filter,n){const gens=GEN[uid]||[];const out=[],seen=new Set();for(let k=0;k<n*60&&out.length<n;k++){let q;SPEC.clear();try{q=pick(gens)();}catch(e){continue;}
+ if(!q||!filter(q))continue;const key=q[0];if(seen.has(key))continue;if(!q.ref&&!qValid(q)&&Math.random()<.8)continue;seen.add(key);out.push(q);}return out;}
+function harakatItems(uid,n){const caseU=['u5','u7','u9','u10','u11','u12','u20','u22','u23','u26','u36','u4','u21','u24','u25'];const out=[];
+ if(!HUB()||!HUB().ayahData)return out;
+ if(uid==='u18'){const P=QV.filter(v=>v[1]==='I'&&v[2]==='A'&&['3MS','3FS','2MS','1S','1P'].includes(v[3])&&v[4]!=='-'&&weakType(v[6])==='صحیح');
+  for(let k=0;k<n*30&&out.length<n;k++){const v=pick(P);const d=v[0],m=d.match(/[\u064E\u064F\u0652]$/);if(!m)continue;const base=d.slice(0,-1);
+   const opts=[base+'\u064F',base+'\u064E',base+'\u0652'];if(!opts.includes(d))continue;out.push({ref:v[7],w:d,opts,a:opts.indexOf(d)});}return out;}
+ if(!caseU.includes(uid))return out;
+ const P=QN.filter(x=>x[2]==='S'&&!x[6]&&['R','A','G'].includes(endCase(x))&&endCase(x)===x[1]);
+ for(let k=0;k<n*40&&out.length<n;k++){const x=pick(P),d=x[0];let base,opts;
+  if(/\u064Bا$/.test(d)||/[\u064B\u064C\u064D]$/.test(d)){base=d.replace(/(\u064Bا|[\u064B\u064C\u064D])$/,'');const fat=/[ةء]$/.test(base)||/اء$/.test(base)?'\u064B':'\u064Bا';opts=[base+'\u064C',base+fat,base+'\u064D'];}
+  else{const m=d.match(/[\u064E\u064F\u0650]$/);if(!m)continue;base=d.slice(0,-1);opts=[base+'\u064F',base+'\u064E',base+'\u0650'];}
+  if(!opts.includes(d))continue;out.push({ref:x[8],w:d,opts,a:opts.indexOf(d)});}
+ return out;}
+function meaningItems(uid,n){const out=[];if(!HUB())return out;let W=null;try{W=HUB().unitWords(uid,30);}catch(e){}
+ if(W&&W.list.length>=4){const L=W.list.filter(x=>x.g);shuffle(L).slice(0,Math.ceil(n/2)).forEach(x=>{const others=shuffle(L.filter(y=>y.g!==x.g)).slice(0,3).map(y=>y.g);if(others.length<2)return;const opts=shuffle([x.g,...others]);out.push({kind:'word',w:x.w,opts,a:opts.indexOf(x.g)});});}
+ const qs=wbGen(uid,q=>!!q.ref,n*2);for(const q of qs){if(out.length>=n)break;const A=HUB().ayahData(q.ref);if(!A||!A.urdu||A.words.length>18)continue;
+  const pool=QVN.V.slice(0);const others=[];for(let k=0;k<40&&others.length<2;k++){const r=pick(pool)[7];if(r===q.ref)continue;const B=HUB().ayahData(r);if(B&&B.urdu&&B.urdu.length<A.urdu.length*2.2&&!others.includes(B.urdu))others.push(B.urdu);}
+  if(others.length<2)continue;const opts=shuffle([A.urdu,...others]);out.push({kind:'ayah',ref:q.ref,words:A.words,opts,a:opts.indexOf(A.urdu)});}
+ return out;}
+function buildItems(uid,n){const qs=wbGen(uid,q=>q[1]!=='t'&&(()=>{const c=q[1][q[2]];const t=c.split(/\s+/).filter(Boolean);return t.length>=2&&t.length<=6&&/[\u0621-\u064A]/.test(c)&&!/[a-z]/i.test(c);})(),n);
+ return qs.map(q=>{const c=q[1][q[2]],toks=c.split(/\s+/).filter(Boolean);const extra=[];q[1].forEach((o,i)=>{if(i===q[2])return;o.split(/\s+/).forEach(w=>{if(w&&!toks.includes(w)&&!extra.includes(w))extra.push(w);});});
+  return {prompt:q[0],answer:toks,tiles:shuffle([...toks,...shuffle(extra).slice(0,2)])};});}
+// ---- UI ----
+function toolWorkbook(el,o){const u=UNITS.find(x=>x.id===o.unit)||UNITS[0];const uid=u.id;const secs=[];
+ if(WB_CHART[uid])secs.push(['chart','Memorisation','Fill in the chart. Vowel marks are optional; only the letters are checked.']);
+ secs.push(['rec','Recognition','Choose the right answer.']);
+ if(HUB()&&harakatItems(uid,1).length)secs.push(['har',"Ḥarakāt in the Qur'an",'The word is missing its ending. Choose how it is actually read in this āyah.']);
+ if(HUB())secs.push(['mean','Meaning',"Choose the right meaning — words of this lesson, and short āyāt with Maudūdī's Urdu."]);
+ if(buildItems(uid,1).length)secs.push(['build','Construction','Tap the words in order to build the answer. One or two extra words are there to catch you.']);
+ secs.forEach((s,i)=>{s[1]=`Section ${i+1} · ${s[1]}`;});
+ el.innerHTML=`<p class="hint">Unit ${UNITS.indexOf(u)+1}: ${esc(u.en)} — every exercise is checked automatically. Tap “New exercises” for a fresh set.</p>${secs.map(([k,t,d])=>`<section class="wbsec" data-sec="${k}"><h2>${esc(t)}</h2><p class="hint">${rich(d)}</p><div class="wbbody"></div><div class="wbfoot"><button class="btn primary" data-check>Check</button><button class="btn ghost" data-new>New exercises</button><span class="wbscore"></span></div></section>`).join('')}
+  <div class="unit-foot"><button class="btn ghost" data-back>Back to the chapter</button></div>`;
+ el.querySelector('[data-back]').onclick=()=>go({tab:'course',unit:uid,unitOpen:true,tool:null,from:null});
+ const score={};
+ el.querySelectorAll('.wbsec').forEach(sec=>{const k=sec.dataset.sec,body=sec.querySelector('.wbbody'),foot=sec.querySelector('.wbscore');let check=()=>[0,0];
+  function build(){foot.textContent='';sec.querySelector('[data-check]').disabled=false;
+   if(k==='chart'){const C=WB_CHART[uid]();body.innerHTML=`<p class="wbq">${rich(C.title)}</p><div class="scroll"><table class="grid wbgrid" dir="rtl"><thead><tr>${C.cols.map(c=>`<th>${rich(c)}</th>`).join('')}</tr></thead><tbody>${C.rows.map(r=>`<tr>${r.map((c,i)=>i===0||typeof c==='string'?`<th>${rich(String(c))}</th>`:c.na?'<td class="na"></td>':c.blank?`<td><input class="ar wbin" dir="rtl" data-a="${esc(c.a)}" autocomplete="off" autocapitalize="off" spellcheck="false"></td>`:`<td><span class="ar">${esc(c.a)}</span></td>`).join('')}</tr>`).join('')}</tbody></table></div>${kpad()}`;
+    bindPad(body);check=()=>{let r=0,t=0;body.querySelectorAll('.wbin').forEach(i=>{t++;const ok=normLoose(i.value)===normLoose(i.dataset.a);if(ok)r++;i.classList.toggle('right',ok);i.classList.toggle('wrong',!ok);if(!ok){i.insertAdjacentHTML('afterend',`<div class="fix ar">${esc(i.dataset.a)}</div>`);}i.readOnly=true;});return [r,t];};}
+   else if(k==='rec'){const Q=wbGen(uid,q=>q[1]!=='t',6);body.innerHTML=Q.map((q,n)=>{const o=shuffle(q[1].map((x,j)=>[x,j]));return `<div class="wbitem" data-a="${q[2]}"><p class="wbq">${n+1}. ${rich(q[0])}</p>${q.ref?ayahBox(q):''}<div class="choices">${o.map(([x,j])=>`<button class="choice" data-j="${j}">${rich(x)}</button>`).join('')}</div><p class="hint wbexp" hidden>${rich(q[3]||'')}</p></div>`;}).join('');mcBind(body);check=mcCheck(body);}
+   else if(k==='har'){const H=harakatItems(uid,5);body.innerHTML=H.map((h,n)=>{const A=HUB().ayahData(h.ref);const tl=qL(h.w);let hi=A?A.words.findIndex(w=>qL(w).includes(tl)):-1;
+     const ay=A?A.words.map((w,i)=>i===hi?'<span class="aw hi">____</span>':`<span class="aw">${esc(w)}</span>`).join(' '):'';
+     return `<div class="wbitem" data-a="${h.a}"><p class="wbq">${n+1}. Which reading is correct here?</p><div class="ayah" dir="rtl">${ay}<span class="aref">${h.ref}</span></div><div class="choices">${h.opts.map((x,j)=>`<button class="choice" data-j="${j}"><span class="ar">${esc(x)}</span></button>`).join('')}</div></div>`;}).join('');mcBind(body);check=mcCheck(body);}
+   else if(k==='mean'){const M=meaningItems(uid,6);body.innerHTML=M.map((m,n)=>`<div class="wbitem" data-a="${m.a}"><p class="wbq">${n+1}. ${m.kind==='word'?`What does <span class="ar">${esc(m.w)}</span> mean?`:'Which is the meaning of this āyah?'}</p>${m.kind==='ayah'?`<div class="ayah" dir="rtl">${m.words.map(w=>`<span class="aw">${esc(w)}</span>`).join(' ')}<span class="aref">${m.ref}</span></div>`:''}<div class="choices ${m.kind==='ayah'?'stack':''}">${m.opts.map((x,j)=>`<button class="choice" data-j="${j}">${m.kind==='ayah'?`<span class="ur" dir="rtl">${esc(x)}</span>`:esc(x)}</button>`).join('')}</div></div>`).join('')||'<p class="hint">No meaning exercises for this unit yet.</p>';mcBind(body);check=mcCheck(body);}
+   else if(k==='build'){const B=buildItems(uid,5);body.innerHTML=B.map((b,n)=>`<div class="wbitem build" data-a="${esc(b.answer.join(' '))}"><p class="wbq">${n+1}. ${rich(b.prompt)}</p><div class="slot ar" dir="rtl"></div><div class="tiles" dir="rtl">${b.tiles.map(t=>`<button class="tile ar">${esc(t)}</button>`).join('')}</div><button class="btn ghost small" data-clear>Clear</button></div>`).join('');
+    body.querySelectorAll('.build').forEach(it=>{const slot=it.querySelector('.slot');it.querySelectorAll('.tile').forEach(t=>t.onclick=()=>{if(it.dataset.done)return;t.disabled=true;slot.insertAdjacentHTML('beforeend',`<span class="pl">${esc(t.textContent)}</span>`);});
+     it.querySelector('[data-clear]').onclick=()=>{if(it.dataset.done)return;slot.innerHTML='';it.querySelectorAll('.tile').forEach(t=>t.disabled=false);};});
+    check=()=>{let r=0,t=0;body.querySelectorAll('.build').forEach(it=>{t++;it.dataset.done=1;const got=[...it.querySelectorAll('.slot .pl')].map(s=>s.textContent).join(' ');const ok=got===it.dataset.a;if(ok)r++;it.classList.add(ok?'ok':'no');
+     if(!ok)it.insertAdjacentHTML('beforeend',`<p class="fix">Answer: <span class="ar">${esc(it.dataset.a)}</span></p>`);});return [r,t];};}
+  }
+  sec.querySelector('[data-check]').onclick=()=>{const [r,t]=check();sec.querySelector('[data-check]').disabled=true;foot.textContent=t?`${r} of ${t} correct`:'';score[k]=[r,t];
+   const tot=Object.values(score).reduce((a,[x,y])=>[a[0]+x,a[1]+y],[0,0]);S.wb=S.wb||{};const pct=tot[1]?Math.round(tot[0]/tot[1]*100):0;S.wb[uid]={pct,date:new Date().toDateString()};
+   S.wbLog=S.wbLog||{};const dk=new Date().toDateString();S.wbLog[dk]=[...new Set([...(S.wbLog[dk]||[]),uid])];save();};
+  sec.querySelector('[data-new]').onclick=build;build();});}
+function mcBind(body){body.querySelectorAll('.wbitem').forEach(it=>it.querySelectorAll('.choice').forEach(b=>b.onclick=()=>{if(it.dataset.done)return;it.querySelectorAll('.choice').forEach(c=>c.classList.remove('sel'));b.classList.add('sel');}));}
+function mcCheck(body){return ()=>{let r=0,t=0;body.querySelectorAll('.wbitem').forEach(it=>{t++;it.dataset.done=1;const a=+it.dataset.a,sel=it.querySelector('.choice.sel');const j=sel?+sel.dataset.j:-1;
+ it.querySelectorAll('.choice').forEach(c=>{c.disabled=true;if(+c.dataset.j===a)c.classList.add('right');});if(sel&&j!==a)sel.classList.add('wrong');if(j===a)r++;const e=it.querySelector('.wbexp');if(e&&e.textContent.trim())e.hidden=false;});return [r,t];};}
+function kpad(){return `<div class="keypad wbpad" aria-label="Arabic letters">${KEYS.map(k=>`<button data-k="${k}" class="ar">${k}</button>`).join('')}<button data-k=" " class="wide">space</button><button data-k="bs" class="wide" aria-label="Delete">⌫</button></div>`;}
+function bindPad(root){let last=null;root.querySelectorAll('.wbin').forEach(i=>i.addEventListener('focus',()=>last=i));
+ root.querySelectorAll('.wbpad button').forEach(b=>{b.onmousedown=e=>e.preventDefault();b.onclick=()=>{if(!last){last=root.querySelector('.wbin');}if(!last||last.readOnly)return;const k=b.dataset.k;last.value=k==='bs'?[...last.value].slice(0,-1).join(''):last.value+k;};});}
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>go({tab:b.dataset.tab,tool:b.dataset.tab==='practice'?null:view.tool,from:null}));
 window.LQA={go,getView:()=>view,getS:()=>S,save,gDue,gWeak:gWeakUnits,UNITS,render,openPage,setBook:b=>{S.curBook=b;save();},curBook:()=>S.curBook||'lisan'};
 render();

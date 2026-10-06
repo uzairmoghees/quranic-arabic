@@ -64,6 +64,17 @@ h1{font-family:'Alegreya',serif;font-weight:700;color:var(--gold2);font-size:1.7
 .wchip small{color:var(--mist);font-size:.72rem;display:block;max-width:150px;line-height:1.2}
 .ok{color:var(--good);font-weight:600}
 .loading{color:var(--mist)}
+.plan{background:linear-gradient(160deg,var(--indigo3),var(--indigo2));border:1px solid var(--gold);border-radius:18px;padding:16px 18px;margin:8px 0 16px}
+.planhead{display:flex;justify-content:space-between;align-items:baseline}.planhead h2{margin:0;font-family:'Alegreya',serif;color:var(--gold2)}.planhead span{color:var(--mist)}
+.pbar{height:6px;background:rgba(255,255,255,.08);border-radius:6px;overflow:hidden;margin:8px 0 10px}.pbar i{display:block;height:100%;background:var(--gold2)}
+.steps{list-style:none;margin:0 0 12px;padding:0;display:grid;gap:6px}
+.steps button{width:100%;display:flex;align-items:center;gap:12px;text-align:left;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:1rem;min-height:48px}
+.steps .chk{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--gold);display:inline-flex;align-items:center;justify-content:center;font-weight:700;color:var(--gold2);flex:none}
+.steps .done button{opacity:.65}.steps .done .chk{background:var(--good);border-color:var(--good);color:var(--indigo)}
+.btn.big{font-size:1.05rem;padding:12px 18px;width:100%;justify-content:center}
+#welcome{position:fixed;inset:0;z-index:60;background:rgba(10,15,28,.82);display:flex;align-items:center;justify-content:center;padding:20px}
+#welcome .wbox{max-width:520px;background:var(--indigo2);border:1px solid var(--gold);border-radius:18px;padding:22px}
+#welcome h1{margin-top:0}#welcome li{margin:.45rem 0}#welcome b{color:var(--gold2)}
 #gate{position:fixed;inset:0;z-index:50;background:radial-gradient(ellipse 120% 70% at 50% -10%,#22304f 0%,var(--indigo) 60%);display:flex;align-items:center;justify-content:center;padding:20px}
 .gbox{width:100%;max-width:380px;background:var(--indigo2);border:1px solid var(--line);border-radius:18px;padding:22px}
 .gbox h1{margin-top:0}.gbrand{text-align:center;font-size:1.8rem;color:var(--gold2)}
@@ -135,17 +146,26 @@ window.LQ={
   else{if(!fL.classList.contains('on'))return;if(tab==='course'||tab==='book'){sec='book';sub=null;}else{sec='practice';sub=(tool==='test'&&L()&&L().getView().opts&&L().getView().opts.review)?'review':'practice';}paint();}},
  clearK(){try{fK.contentDocument.querySelectorAll('.overlay').forEach(o=>o.remove());}catch(e){}},
  root(r){this.clearK();sec='practice';sub='practice';paint();const l=L();if(l)l.go({tab:'practice',tool:'conj',opts:{root:r,form:'I',show:'madi',fromHub:true},from:null});},
+ ayahData(ref){const k=K();if(!k||!k.VIDX||!k.VIDX[ref])return null;return {words:k.VIDX[ref].map(f=>k.FORMS[f].w),urdu:(k.URDU||{})[ref]||''};},
+ unitWords(u,n){const k=K(),l=L();if(!k||!l)return null;const w=wordsFor(u,l.getS(),n||10);if(!w)return null;
+  return {label:w.label||'',list:w.list.map(C=>{const L0=k.LEMMAS[C.m];return {w:C.w,g:(L0&&k.GLOSS[L0.l])||'',k:C.k};})};},
+ addUnitWords(u){const k=K(),l=L();if(!k||!l)return 0;const w=wordsFor(u,l.getS(),10);if(!w)return 0;w.list.forEach(C=>{if(!k.state.starred[C.k])k.toggleStar(C.ci);});return w.list.length;},
+ openWords(){open('words','study');},
  ayah(ref){this.clearK();sec='quran';sub='read';paint();const k=K();if(k){k.go('read');k.showAyah(ref);}}
 };
 // ---- concept → Qur'anic words (weak spots feed the word review) ----
 const VFNAME={'إِفْعَال':'4','تَفْعِيل':'2','مُفَاعَلَة':'3','تَفَعُّل':'5','تَفَاعُل':'6','اِفْتِعَال':'8','اِنْفِعَال':'7','اِسْتِفْعَال':'10'};
+function hasDet(F){return F.s.some(x=>x.t==='DET');}
 function stemOf(F){return F.s.find(x=>x.t==='V')||F.s.find(x=>['N','ADJ','PN','ACT_PCPL','PASS_PCPL','VN'].includes(x.t))||F.s[0];}
 function predFor(u,S){const r=s=>[...(s.r||'')];const V=s=>s.t==='V';
- const P={u2:s=>s.t==='N'&&/^F/.test(s.n||'')&&!/[DP]/.test(s.n||''),u3:s=>['N','ADJ'].includes(s.t)&&/[DP]/.test(s.n||''),u5:s=>['N','ADJ'].includes(s.t)&&!!s.c,
+ const P={u3:s=>['N','ADJ'].includes(s.t)&&/[DP]/.test(s.n||''),u5:s=>['N','ADJ'].includes(s.t)&&!!s.c,
   u14:s=>V(s)&&s.x==='PERF'&&!s.ps,u15:s=>V(s)&&s.x==='IMPF'&&s.d==='IND'&&!s.ps,u17:s=>V(s)&&s.ps,u18:s=>V(s)&&(s.d==='SUBJ'||s.d==='JUS'),u19:s=>V(s)&&s.x==='IMPV',
-  u29:s=>V(s)&&s.ps&&s.v!=='1',u30:s=>V(s)&&/[أءإ]/.test(s.r||''),u31:s=>V(s)&&r(s).length===3&&r(s)[1]===r(s)[2],u32:s=>V(s)&&'وي'.includes(r(s)[0]),u33:s=>V(s)&&'وي'.includes(r(s)[1]),
-  u34:s=>V(s)&&'وي'.includes(r(s)[2]),u37:s=>['ACT_PCPL','PASS_PCPL'].includes(s.t),u22:s=>s.t==='PN'};
- if(u==='u28'){const cnt={};Object.values(S.gsrs||{}).filter(c=>c.u==='u28').forEach(c=>{const a=c.q[1]==='t'?c.q[2][0]:c.q[1][c.q[2]];if(VFNAME[a])cnt[VFNAME[a]]=(cnt[VFNAME[a]]||0)+1;});
+  u29:s=>V(s)&&s.ps&&s.v!=='1',u1:s=>['N','V','P'].includes(s.t),u4:s=>s.t==='N',u6:s=>['PRON','DEM','REL','P'].includes(s.t),u7:s=>s.t==='N'&&s.c==='NOM',
+  u8:s=>['PRON','DEM'].includes(s.t),u9:s=>s.t==='ADJ',u10:s=>s.t==='N'&&s.c==='GEN',u11:s=>s.t==='P',u12:s=>s.t==='N'&&s.c==='ACC',u13:s=>['REL','INTG','NEG'].includes(s.t),
+  u16:s=>V(s)&&s.v==='1',u20:s=>['N','ADJ'].includes(s.t)&&s.c==='ACC',u21:s=>s.t==='N',u23:s=>s.t==='N'&&s.c==='GEN',u24:s=>s.t==='N',u25:s=>s.t==='N',u26:s=>['NEG','N'].includes(s.t),
+  u27:s=>V(s),u28:s=>V(s)&&s.v!=='1',u35:s=>V(s),u36:s=>['CONJ','ADJ'].includes(s.t),u38:s=>['P','CONJ','NEG','INTG','COND','SUB','VOC','EMPH'].includes(s.t),u39:s=>s.t==='N',u30:s=>V(s)&&/[أءإ]/.test(s.r||''),u31:s=>V(s)&&r(s).length===3&&r(s)[1]===r(s)[2],u32:s=>V(s)&&'وي'.includes(r(s)[0]),u33:s=>V(s)&&'وي'.includes(r(s)[1]),
+  u34:s=>V(s)&&'وي'.includes(r(s)[2]),u37:s=>['ACT_PCPL','PASS_PCPL'].includes(s.t),u22:s=>s.t==='PN',u2:s=>s.t==='N'&&/^F/.test(s.n||'')};
+ if(u==='u28'&&S&&S.gsrs){const cnt={};Object.values(S.gsrs||{}).filter(c=>c.u==='u28').forEach(c=>{const a=c.q[1]==='t'?c.q[2][0]:c.q[1][c.q[2]];if(VFNAME[a])cnt[VFNAME[a]]=(cnt[VFNAME[a]]||0)+1;});
   const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0];return top?{f:s=>V(s)&&s.v===top[0],label:'Form '+['','I','II','III','IV','V','VI','VII','VIII','IX','X'][+top[0]]}:{f:s=>V(s)&&s.v!=='1',label:'derived forms'};}
  return P[u]?{f:P[u]}:null;}
 function wordsFor(u,S,n=8){const k=K();const p=predFor(u,S);if(!k||!p)return null;const out=[];
@@ -161,10 +181,24 @@ function renderToday(flash){
  if(!k||!l){el.innerHTML='<p class="loading">Loading your progress…</p>';return;}
  const st=k.srsStats(),S=l.getS(),due=l.gDue().length,weak=l.gWeak().slice(0,3),U=l.UNITS;
  const cov=k.coveragePct(),streak=(k.state.streak&&k.state.streak.n)||0;
- const cur=U.find(u=>u.id===S.last)||U[0],ci=U.indexOf(cur),done=Object.keys(S.done||{}).length;
+ let cur=U.find(u=>u.id===S.last)||U[0];if(S.done&&S.done[cur.id]){const nx=U.slice(U.indexOf(cur)+1).find(u=>!S.done[u.id]);if(nx)cur=nx;}
+ const ci=U.indexOf(cur),done=Object.keys(S.done||{}).length;
+ const dk=new Date().toDateString(),day0=new Date();day0.setHours(0,0,0,0);
+ const readT=((S.readLog||{})[dk]||[]).includes(cur.id),wbT=((S.wbLog||{})[dk]||[]).includes(cur.id),testT=((S.testLog||{})[dk]||[]).some(x=>x.u===cur.id);
+ let wordsT=0;try{Object.values(k.state.srs||{}).forEach(c=>{if(c&&c.d&&(c.d-(c.v||0)*86400000)>=day0.getTime())wordsT++;});}catch(e){}
+ const steps=[
+  {t:st.due+due?`Review ${st.due+due} due item${st.due+due===1?'':'s'}`:'Reviews — nothing due',d:!(st.due+due),go:()=>st.due?open('words','study'):open('practice','review')},
+  {t:`Read Unit ${ci+1}: ${cur.en}`,d:readT,go:()=>{sec='book';sub=null;paint();l.go({tab:'course',unit:cur.id,unitOpen:true,tool:null,from:null});}},
+  {t:`Workbook for Unit ${ci+1}`,d:wbT,go:()=>{sec='practice';sub='practice';paint();l.go({tab:'practice',tool:'wb',opts:{unit:cur.id},from:cur.id});}},
+  {t:`Unit ${ci+1} test`,d:testT,go:()=>{sec='practice';sub='practice';paint();l.go({tab:'practice',tool:'test',opts:{unit:cur.id,n:25},from:cur.id});}},
+  {t:`Learn 10 words (${Math.min(wordsT,10)}/10)`,d:wordsT>=10,go:()=>open('words','study')}];
+ const ndone=steps.filter(x=>x.d).length,nextStep=steps.find(x=>!x.d);
  const gloss=C=>{const L0=k.LEMMAS[C.m];return (L0&&k.GLOSS[L0.l])||'';};
- el.innerHTML=`<h1>Today</h1><p class="lede">One review queue for words and grammar. Start with what's due, then learn something new.</p>
+ el.innerHTML=`<h1>Today</h1>
  ${flash?`<p class="ok">${esc(flash)}</p>`:''}
+ <div class="plan"><div class="planhead"><h2>Today's plan</h2><span>${ndone} of ${steps.length} done</span></div><div class="pbar"><i style="width:${ndone/steps.length*100}%"></i></div>
+  <ol class="steps">${steps.map((x,j)=>`<li class="${x.d?'done':''}"><button data-step="${j}"><span class="chk">${x.d?'✓':j+1}</span>${esc(x.t)}</button></li>`).join('')}</ol>
+  ${nextStep?`<button class="btn solid big" data-startnext>${ndone?'Continue':'Start'}: ${esc(nextStep.t)}</button>`:'<p class="ok">All done for today — well done.</p>'}</div>
  <div class="stats"><div class="stat"><b>${streak}</b><span>day streak</span></div><div class="stat"><b>${cov.toFixed(1)}%</b><span>of the Qur'an's words you've studied</span></div>
  <div class="stat"><b>${st.due+due}</b><span>reviews due (${st.due} words, ${due} grammar)</span></div><div class="stat"><b>${done}/${U.length}</b><span>grammar units done</span></div></div>
  <div class="grid">
@@ -178,6 +212,8 @@ function renderToday(flash){
     ${w&&w.list.length?`<div class="muted">Qur'anic words that use this${w.label?` (${w.label})`:''}, not yet learned:</div><div class="words">${w.list.map(C=>`<span class="wchip"><span class="ar">${esc(C.w||'')}</span><small>${esc(gloss(C))}</small></span>`).join('')}</div><button class="btn solid" data-add="${u}">Add these to my word review</button>`:''}</div>`;}).join('')
    :`<p class="muted">Nothing stands out yet. Units you keep missing questions on will show here, with Qur'anic words that practise the same point.</p>`}</div>
  </div>`;
+ el.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>steps[+b.dataset.step].go());
+ const sn=el.querySelector('[data-startnext]');if(sn)sn.onclick=()=>nextStep.go();
  el.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{const [s,sb]=b.dataset.go.split(':');open(s,sb);});
  el.querySelectorAll('[data-unit]').forEach(b=>b.onclick=()=>{sec='book';sub=null;paint();l.go({tab:'course',unit:b.dataset.unit,unitOpen:true,tool:null,from:null});});
  el.querySelectorAll('[data-test]').forEach(b=>b.onclick=()=>{sec='practice';sub='practice';paint();l.go({tab:'practice',tool:'test',opts:{unit:b.dataset.test,n:25},from:b.dataset.test});});
@@ -185,7 +221,15 @@ function renderToday(flash){
 fK.addEventListener('load',()=>{if(!fK.src)return;loaded.K=true;if(sec==='today')renderToday();});
 fL.addEventListener('load',()=>{if(!fL.src)return;loaded.L=true;if(sec==='today')renderToday();});
 window.QA_OPEN=s=>open(s);
-window.QA_START=()=>{[fK,fL].forEach(f=>{if(!f.src)f.src=f.dataset.src;});paint();renderToday();};
+window.QA_START=()=>{[fK,fL].forEach(f=>{if(!f.src)f.src=f.dataset.src;});paint();renderToday();welcome();};
+function welcome(){if(localStorage.getItem('qa.welcome')==='1')return;const w=document.createElement('div');w.id='welcome';
+ w.innerHTML=`<div class="wbox"><div class="ar" style="font-size:1.6rem;color:var(--gold2);text-align:center">بِسْمِ اللّٰهِ</div><h1>How to use this app</h1><ol>
+ <li><b>Today</b> — your plan for the day. Tap <b>Start</b> and follow the steps.</li>
+ <li><b>Book</b> — one chapter per lesson: the explanation, the Lisan ul Quran pages, the Dream pages, the workbook and the test, all in one place.</li>
+ <li><b>Practice</b> — drills, and <b>Review</b> for questions you got wrong.</li>
+ <li><b>Words</b> — learn the Qur'an's most frequent words. <b>Qur'an</b> — read any āyah and tap a word to see its grammar.</li></ol>
+ <button class="btn solid big" id="wgo">Start learning</button></div>`;document.body.appendChild(w);
+ w.querySelector('#wgo').onclick=()=>{localStorage.setItem('qa.welcome','1');w.remove();};}
 paint();
 window.QA_BOOT();
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
