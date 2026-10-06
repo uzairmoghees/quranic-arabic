@@ -28,8 +28,8 @@ Dream textbook pages, the Dream homework (answer key hidden until opened), then 
 After the first visit everything works offline. Progress is stored on each device separately.
 
 ## Updating
-Upload the changed files over the old ones. Also edit `sw.js` and change `VERSION='qa-v1'`
-to a new value (e.g. `qa-v2`) so installed copies fetch the new files.
+Upload the changed files over the old ones. Also edit `sw.js` and raise the number in `VERSION='qa-v6'`
+(e.g. to `qa-v7`) so installed copies fetch the new files.
 
 ## Test on your own PC before uploading
 The app must be served over http, not opened by double-clicking. In this folder run:

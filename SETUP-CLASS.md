@@ -16,10 +16,13 @@ You do this once. It takes about 15 minutes. Everything here is free on Supabase
 2. Keep Email enabled. Turn **off** "Allow new users to sign up". Turn **off** "Confirm email". Save.
 
 ## 4. Create accounts (you + 3 students)
+Students sign in with **just a name** (e.g. `ahmed`) and a password. In Supabase each name is stored
+as an email ending in `@example.com` — nobody ever sees or receives email.
 1. **Authentication** → **Users** → **Add user** → **Create new user**.
-2. Enter an email and a password, tick **Auto Confirm User**, create. Repeat for each student.
-   - Students don't need a real inbox — any email-shaped name works, e.g. `ahmed@myclass.app`.
-3. Write each student's email and password on a card for them.
+2. Email: the student's name + `@example.com`, all lowercase, no spaces — e.g. `ahmed@example.com`.
+   Password: something they can type (at least 6 characters). Tick **Auto Confirm User**, create.
+3. Repeat for each student. Give each one a card with their **name** (`ahmed`) and password.
+4. Make your own account the same way (e.g. `uzair@example.com`), or use your real email — both work.
 
 ## 5. Connect the app
 1. **Project Settings** (gear icon) → **API** (or **Data API**).

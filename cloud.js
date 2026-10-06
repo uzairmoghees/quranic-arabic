@@ -2,6 +2,9 @@
 (function(){
 const CFG=window.QA_CONFIG||{};
 const CLOUD=!!(CFG.supabaseUrl&&CFG.supabaseAnonKey&&window.supabase);
+const DOMAIN=(CFG.usernameDomain||'example.com').replace(/^@/,'');
+// students type a name; the app turns it into the hidden account email (ahmed -> ahmed@example.com)
+const toEmail=s=>{s=String(s||'').trim().toLowerCase();return s.includes('@')?s:s.replace(/\s+/g,'')+'@'+DOMAIN;};
 const DAY=86400000;
 const isAppKey=k=>k&&(k.startsWith('kalimat.')||k==='lq-companion-v1');
 const readLocal=()=>{const o={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(isAppKey(k))o[k]=localStorage.getItem(k);}return o;};
@@ -49,16 +52,16 @@ setInterval(()=>{if(dirty)push();else status();},30000);
 // ---- screens ----
 function gate(html){let g=$('#gate');if(!g){g=document.createElement('div');g.id='gate';document.body.appendChild(g);}g.innerHTML=`<div class="gbox">${html}</div>`;return g;}
 function closeGate(){const g=$('#gate');if(g)g.remove();}
-function loginScreen(msg){const g=gate(`<div class="ar gbrand">لِسَانٌ عَرَبِيٌّ مُبِينٌ</div><h1>Sign in</h1><p class="muted">Use the email and password your teacher gave you.</p>
- <label>Email<input id="gE" type="email" autocomplete="username" autocapitalize="off" inputmode="email"></label>
+function loginScreen(msg){const g=gate(`<div class="ar gbrand">لِسَانٌ عَرَبِيٌّ مُبِينٌ</div><h1>Sign in</h1><p class="muted">Type your name and the password your teacher gave you.</p>
+ <label>Name<input id="gE" type="text" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="e.g. ahmed"></label>
  <label>Password<input id="gP" type="password" autocomplete="current-password"></label>
  <p class="gerr">${esc(msg||'')}</p><button class="btn solid" id="gGo">Sign in</button>`);
- const go=async()=>{const e=$('#gE').value.trim(),p=$('#gP').value;if(!e||!p)return;$('#gGo').disabled=true;$('#gGo').textContent='Signing in…';
+ const go=async()=>{const e=toEmail($('#gE').value),p=$('#gP').value;if(!e||!p)return;$('#gGo').disabled=true;$('#gGo').textContent='Signing in…';
   const r=await sb.auth.signInWithPassword({email:e,password:p});
-  if(r.error){loginScreen(navigator.onLine?'That email and password did not match. Check with your teacher.':'You need internet to sign in the first time.');return;}
+  if(r.error){loginScreen(navigator.onLine?'That name and password did not match. Check with your teacher.':'You need internet to sign in the first time.');return;}
   user=r.data.user;await afterLogin();};
  $('#gGo').onclick=go;$('#gP').onkeydown=e=>{if(e.key==='Enter')go();};}
-function nameScreen(){return new Promise(res=>{gate(`<h1>Welcome</h1><p class="muted">What name should your teacher see?</p><label>Your name<input id="gN" autocomplete="name"></label><p class="gerr"></p><button class="btn solid" id="gGo">Continue</button>`);
+function nameScreen(){return new Promise(res=>{gate(`<h1>Welcome</h1><p class="muted">What name should your teacher see?</p><label>Your name<input id="gN" autocomplete="name" value="${esc((user.email||'').split('@')[0].replace(/^./,ch=>ch.toUpperCase()))}"></label><p class="gerr"></p><button class="btn solid" id="gGo">Continue</button>`);
  $('#gGo').onclick=async()=>{const n=$('#gN').value.trim();if(!n)return;const r=await sb.from('profiles').insert({id:user.id,name:n});if(r.error){$('.gerr').textContent='Could not save — check your connection.';return;}res({id:user.id,name:n,role:'student'});};});}
 async function afterLogin(){gate('<p class="muted">Getting your progress…</p>');
  // profile (cached for offline starts)

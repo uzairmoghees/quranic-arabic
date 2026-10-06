@@ -2,5 +2,6 @@
 // Leave them empty to use the app without sign-in (progress stays on each device).
 window.QA_CONFIG = {
   supabaseUrl: '',      // e.g. 'https://abcdxyz.supabase.co'
-  supabaseAnonKey: ''   // the "anon" / "publishable" key from Project Settings → API
+  supabaseAnonKey: '',  // the "anon" / "publishable" key from Project Settings → API
+  usernameDomain: 'example.com'  // students sign in with just a name: "ahmed" = ahmed@example.com in Supabase
 };
